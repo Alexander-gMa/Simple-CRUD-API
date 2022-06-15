@@ -1,7 +1,8 @@
 import http from 'http';
 import { envConfig } from './common/config';
-import { getAllUsers } from './services/User.router';
+import { getAllUsers, createUser } from './services/User.router';
 import { MethodType } from './Server/Server.types';
+
 
 const port = envConfig.SERVER_PORT;
 
@@ -12,6 +13,7 @@ const server = http.createServer((req, res) => {
     try {
         if (url?.includes('/users')) {
             if (method === 'GET' && url === '/users') getAllUsers(req, res);
+            if (method === 'POST' && url === '/users') createUser(req, res);
         } else {
             throw new Error()
         }

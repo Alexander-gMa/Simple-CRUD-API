@@ -1,7 +1,10 @@
-import { getAll } from "./User.service";
+import { getAll, create } from "./User.service";
 import { RouterCallbackFunc } from "../Server/Server.types";
+import { v4, validate as validateUUID } from 'uuid';
+import parse from 'querystring'
+import { URLSearchParams } from 'url';
 
-const getAllUsers: RouterCallbackFunc = async (req: any, res: any) => {
+const getAllUsers: RouterCallbackFunc = async (req, res) => {
     try {
         const users = await getAll();
         res.setHeader("Content-Type", "application/json");
@@ -14,4 +17,19 @@ const getAllUsers: RouterCallbackFunc = async (req: any, res: any) => {
     }
 };
 
-export { getAllUsers }
+const createUser: RouterCallbackFunc = async (req, res) => {
+    let data = '';
+    req.on('data', (chunk) => (data += chunk));
+    req.on('end', () => {
+        let newUserData;
+        try {
+            newUserData = JSON.parse(data);
+            res.writeHead(201, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify(newUserData));
+        } catch (err) {
+        }
+    })
+
+}
+
+export { getAllUsers, createUser }

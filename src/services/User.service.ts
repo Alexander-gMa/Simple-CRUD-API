@@ -1,5 +1,11 @@
-import { getAllUsers } from "./user.repository";
+import { IUser } from '../services/User.model'
 
-const getAll = () => getAllUsers();
+let dataBase: IUser[] = []
 
-export { getAll }
+const getAll = () => dataBase;
+
+const create = (user: IUser) => {
+    dataBase.push(user);
+}
+
+export { getAll, create };
