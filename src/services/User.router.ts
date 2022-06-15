@@ -1,6 +1,7 @@
 import { getAll } from "./User.service";
+import { RouterCallbackFunc } from "../Server/Server.types";
 
-const getAllUsers = async (req: any, res: any) => {
+const getAllUsers: RouterCallbackFunc = async (req: any, res: any) => {
     try {
         const users = await getAll();
         res.setHeader("Content-Type", "application/json");
