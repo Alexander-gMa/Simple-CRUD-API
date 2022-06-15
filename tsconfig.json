@@ -10,7 +10,7 @@
     "noImplicitAny": true,
     "skipLibCheck": true,
   },
-  "include": [""],
+  "include": ["src/**/*"],
   "exclude": [
     "node_modules"
   ]
