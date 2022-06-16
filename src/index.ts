@@ -1,13 +1,13 @@
 import http from 'http';
 import { envConfig } from './common/config';
-import { getAllUsers, createUser, deleteUser, updateUser } from './services/User.router';
+import { getAllUsers, createUser, deleteUser, updateUser, getUserByID } from './services/User.router';
 import { MethodType } from './Server/Server.types';
 
 
 const port = envConfig.SERVER_PORT;
 
 const SERVER_ROUTES = {
-    GET: createUser,
+    GET: getUserByID,
     POST: createUser,
     DELETE: deleteUser,
     PUT: updateUser
@@ -17,7 +17,7 @@ const server = http.createServer(async (req, res) => {
     const method = req.method as MethodType;
     const url: string | undefined = req.url;
     try {
-        if (url?.includes('/api/users')) {
+        if (url?.startsWith('/api/users')) {
             if (method === 'GET' && url === '/api/users') await getAllUsers(req, res);
             else {
                 await SERVER_ROUTES[method](req, res)

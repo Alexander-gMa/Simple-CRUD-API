@@ -38,4 +38,4 @@ const update = (id: string, user: IUser) => {
     } else throw new Error('такого юзера нету!');
 };
 
-export { getAll, create, remove, update };
+export { getAll, create, remove, update, searchUser };
