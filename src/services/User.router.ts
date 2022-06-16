@@ -36,12 +36,11 @@ const deleteUser: RouterCallbackFunc = async (req, res) => {
     try {
         const url = req.url;
         const userId = url?.substring('/api/users/'.length);
-        await remove(userId as string)
-        res.setHeader("Content-Type", "application/json");
-        res.statusCode = 204;
-        res.end('User was deleted');
+        remove(userId as string);
+        res.writeHead(204, { 'Content-Type': 'application/json' });
+        res.end();
     } catch (error) {
-        console.log(error);
+        res.end('aaa');
     }
 }
 

@@ -13,13 +13,14 @@ const SERVER_ROUTES = {
     PUT: deleteUser
 }
 
-const server = http.createServer((req, res) => {
+const server = http.createServer(async (req, res) => {
     const method = req.method as MethodType;
     const url: string | undefined = req.url;
     try {
         if (url?.includes('/api/users')) {
-            if (method === 'GET' && url === '/api/users') getAllUsers(req, res);
-            else SERVER_ROUTES[method](req, res);
+            if (method === 'GET' && url === '/api/users') await getAllUsers(req, res);
+            else {
+                await SERVER_ROUTES[method](req, res)}; 
         } else {
             throw new Error('404 ошибка');
         }
