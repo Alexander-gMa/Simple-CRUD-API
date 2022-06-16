@@ -20,12 +20,14 @@ const getAllUsers: RouterCallbackFunc = async (req, res) => {
 const createUser: RouterCallbackFunc = async (req, res) => {
     let data = '';
     req.on('data', (chunk) => (data += chunk));
-    req.on('end', () => {
-        let newUserData;
+    req.on('end', async () => {
+        let userData;
         try {
-            newUserData = JSON.parse(data);
+            userData = JSON.parse(data);
+            const newUser = await create(userData);
+            console.log(newUser);
             res.writeHead(201, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify(newUserData));
+            res.end(JSON.stringify(newUser));
         } catch (err) {
         }
     })

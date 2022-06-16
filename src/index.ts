@@ -12,8 +12,8 @@ const server = http.createServer((req, res) => {
 
     try {
         if (url?.includes('/users')) {
-            if (method === 'GET' && url === '/users') getAllUsers(req, res);
-            if (method === 'POST' && url === '/users') createUser(req, res);
+            if (method === 'GET' && url === 'api/users') getAllUsers(req, res);
+            if (method === 'POST' && url === 'api/users') createUser(req, res);
         } else {
             throw new Error()
         }
