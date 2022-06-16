@@ -9,11 +9,10 @@ const port = envConfig.SERVER_PORT;
 const server = http.createServer((req, res) => {
     const method = req.method as MethodType;
     const url: string | undefined = req.url;
-
     try {
-        if (url?.includes('/users')) {
-            if (method === 'GET' && url === 'api/users') getAllUsers(req, res);
-            if (method === 'POST' && url === 'api/users') createUser(req, res);
+        if (url?.includes('/api/users')) {
+            if (method === 'GET' && url === '/api/users') getAllUsers(req, res);
+            if (method === 'POST' && url === '/api/users') createUser(req, res);
         } else {
             throw new Error()
         }
