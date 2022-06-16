@@ -1,4 +1,4 @@
-import { getAll, create } from "./User.service";
+import { getAll, create, remove, dataBase } from "./User.service";
 import { RouterCallbackFunc } from "../Server/Server.types";
 import { v4, validate as validateUUID } from 'uuid';
 import parse from 'querystring'
@@ -25,13 +25,24 @@ const createUser: RouterCallbackFunc = async (req, res) => {
         try {
             userData = JSON.parse(data);
             const newUser = await create(userData);
-            console.log(newUser);
             res.writeHead(201, { 'Content-Type': 'application/json' });
             res.end(JSON.stringify(newUser));
         } catch (err) {
         }
     })
-
 }
 
-export { getAllUsers, createUser }
+const deleteUser: RouterCallbackFunc = async (req, res) => {
+    try {
+        const url = req.url;
+        const userId = url?.substring('/api/users/'.length);
+        await remove(userId as string)
+        res.setHeader("Content-Type", "application/json");
+        res.statusCode = 204;
+        res.end('User was deleted');
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+export { getAllUsers, createUser, deleteUser }

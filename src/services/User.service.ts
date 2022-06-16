@@ -3,6 +3,14 @@ import { v4, validate as validateUUID } from 'uuid';
 
 let dataBase: IUser[] = []
 
+const searchUser = (id: string) => {
+    console.log(id,'\nasdfafasdfasdasdasdasd');
+    console.log(dataBase,'bbb');
+    const correctUser = dataBase.filter(user => user.id == id);
+    if (correctUser.length > 1) return false;
+    return (correctUser.length) ? correctUser[0] : false;
+}
+
 const getAll = () => dataBase;
 
 const create = (user: IUser): Promise<IUser> => {
@@ -14,4 +22,16 @@ const create = (user: IUser): Promise<IUser> => {
     })
 }
 
-export { getAll, create };
+const remove = (id: string) => {
+    // if (!validateUUID(id)) throw new Error('айди не валидный')
+    const existingUser = searchUser(id);
+    console.log(existingUser);
+    if (existingUser) {
+        const index = dataBase.indexOf(existingUser);
+        dataBase.splice(index, 1);
+        return true;
+    }
+    // } else throw new Error('такого юзера нету!');
+};
+
+export { getAll, create, remove, dataBase };
