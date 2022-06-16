@@ -27,7 +27,15 @@ const remove = (id: string) => {
         const index = dataBase.indexOf(existingUser);
         dataBase.splice(index, 1);
     } else throw new Error('такого юзера нету!');
-
 };
 
-export { getAll, create, remove, dataBase };
+const update = (id: string, user: IUser) => {
+    if (!validateUUID(id)) throw new Error('айди не валидный')
+    const existingUser = searchUser(id);
+    if (existingUser) {
+        const index = dataBase.indexOf(existingUser);
+        dataBase[index] = { ...dataBase[index], ...user };
+    } else throw new Error('такого юзера нету!');
+};
+
+export { getAll, create, remove, update };

@@ -1,6 +1,6 @@
 import http from 'http';
 import { envConfig } from './common/config';
-import { getAllUsers, createUser, deleteUser } from './services/User.router';
+import { getAllUsers, createUser, deleteUser, updateUser } from './services/User.router';
 import { MethodType } from './Server/Server.types';
 
 
@@ -10,7 +10,7 @@ const SERVER_ROUTES = {
     GET: createUser,
     POST: createUser,
     DELETE: deleteUser,
-    PUT: deleteUser
+    PUT: updateUser
 }
 
 const server = http.createServer(async (req, res) => {
@@ -20,7 +20,8 @@ const server = http.createServer(async (req, res) => {
         if (url?.includes('/api/users')) {
             if (method === 'GET' && url === '/api/users') await getAllUsers(req, res);
             else {
-                await SERVER_ROUTES[method](req, res)}; 
+                await SERVER_ROUTES[method](req, res)
+            };
         } else {
             throw new Error('404 ошибка');
         }
