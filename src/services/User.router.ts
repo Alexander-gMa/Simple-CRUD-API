@@ -1,5 +1,6 @@
 import { getAll, create, remove, update, searchUser } from "./User.service";
 import { RouterCallbackFunc } from "../Server/Server.types";
+import { BaseError } from "../Errors/CustomErrors";
 
 const getAllUsers: RouterCallbackFunc = async (req, res) => {
     try {
@@ -36,8 +37,11 @@ const deleteUser: RouterCallbackFunc = async (req, res) => {
         remove(userId as string);
         res.writeHead(204, { 'Content-Type': 'application/json' });
         res.end();
-    } catch (error) {
-        res.end('error');
+    } catch (err) {
+        if (err instanceof BaseError) {
+            res.statusCode = err.code;
+            res.end(err.message);
+        }
     }
 }
 

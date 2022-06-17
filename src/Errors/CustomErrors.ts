@@ -16,8 +16,14 @@ export class NotFoundError extends BaseError {
     }
 }
 
-// export class ServerInternalError extends BaseError {
-//     constructor(message: string = MESSAGES.SERVER_INTERNAL) {
-//       super(message, 500);
-//     }
-//   }
+export class ServerInternalError extends BaseError {
+    constructor(message: string = ERROR_MESSAGES.SERVER_INTERNAL) {
+        super(message, 500);
+    }
+}
+
+export class InvalidUUIDError extends BaseError {
+    constructor(id: string) {
+        super(`UserID = ${id} is invalid (not uuid)`, 400);
+    }
+}

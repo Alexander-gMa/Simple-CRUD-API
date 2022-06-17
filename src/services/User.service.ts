@@ -1,5 +1,6 @@
 import { IUser } from '../services/User.model';
 import { v4, validate as validateUUID } from 'uuid';
+import { InvalidUUIDError } from '../Errors/CustomErrors';
 
 let dataBase: IUser[] = []
 
@@ -21,7 +22,7 @@ const create = (user: IUser): Promise<IUser> => {
 }
 
 const remove = (id: string) => {
-    if (!validateUUID(id)) throw new Error('айди не валидный')
+    if (!validateUUID(id)) throw new InvalidUUIDError(id);
     const existingUser = searchUser(id);
     if (existingUser) {
         const index = dataBase.indexOf(existingUser);

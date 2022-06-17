@@ -2,8 +2,7 @@ import http from 'http';
 import { envConfig } from './common/config';
 import { getAllUsers, createUser, deleteUser, updateUser, getUserByID } from './services/User.router';
 import { MethodType } from './Server/Server.types';
-import { BaseError, NotFoundError } from './Errors/CustomErrors';
-import { ERROR_MESSAGES } from './Errors/error.messages';
+import { BaseError, NotFoundError, ServerInternalError } from './Errors/CustomErrors';
 
 
 const port = envConfig.SERVER_PORT;
@@ -32,8 +31,9 @@ const server = http.createServer(async (req, res) => {
             res.statusCode = err.code;
             res.end(err.message);
         } else {
-            res.statusCode = 500;
-            res.end(ERROR_MESSAGES.SERVER_INTERNAL);
+            const { code, message } = new ServerInternalError();
+            res.statusCode = code;
+            res.end(message);
         }
     }
 })
