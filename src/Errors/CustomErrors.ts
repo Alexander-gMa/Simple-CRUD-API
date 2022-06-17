@@ -43,7 +43,24 @@ export class CrashDataBaseError extends BaseError {
 }
 
 export class BadRequestError extends BaseError {
-    constructor() {
-        super(`${ERROR_MESSAGES.BAD_REQUEST}\nRequst.body does not contain required fields`, 400)
+    constructor(option: string) {
+        switch (option) {
+            case 'field':
+                super(`${ERROR_MESSAGES.BAD_REQUEST}\nRequst.body does not contain required fields`, 400);
+                break;
+            case 'username':
+                super(`${ERROR_MESSAGES.BAD_REQUEST}\nusername must be a string`, 400);
+                break;
+            case 'age':
+                super(`${ERROR_MESSAGES.BAD_REQUEST}\age must be a string`, 400);
+                break;
+            case 'hobbies':
+                super(`${ERROR_MESSAGES.BAD_REQUEST}\nhobbies must be an array`, 400);
+                break;
+            case 'hobbiesArray':
+                super(`${ERROR_MESSAGES.BAD_REQUEST}\nhobbies should include only string`, 400);
+                break;
+        }
+
     }
 }
