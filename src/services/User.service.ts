@@ -1,6 +1,7 @@
 import { IUser } from '../services/User.model';
 import { v4, validate as validateUUID } from 'uuid';
 import { InvalidUUIDError, NotExistUserError, CrashDataBaseError } from '../Errors/CustomErrors';
+import { userValidate } from '../utils/user.validate';
 
 let dataBase: IUser[] = []
 
@@ -15,6 +16,7 @@ const searchUser = (id: string) => {
 const getAll = () => dataBase;
 
 const create = (user: IUser): Promise<IUser> => {
+    userValidate(user);
     return new Promise((resolve) => {
         const id = v4();
         const newUser = { ...user, id };
@@ -30,6 +32,7 @@ const remove = (id: string) => {
 };
 
 const update = (id: string, user: IUser) => {
+    userValidate(user);
     const existingUser = searchUser(id);
     const index = dataBase.indexOf(existingUser as IUser);
     dataBase[index] = { ...dataBase[index], ...user };
