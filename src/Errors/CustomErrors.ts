@@ -41,3 +41,9 @@ export class CrashDataBaseError extends BaseError {
         super(`Data base is corrupted\n. Please reload the App`, 400)
     }
 }
+
+export class BadRequestError extends BaseError {
+    constructor() {
+        super(`${ERROR_MESSAGES.BAD_REQUEST}\nRequst.body does not contain required fields`, 400)
+    }
+}
