@@ -32,7 +32,7 @@ export class InvalidUUIDError extends BaseError {
 
 export class NotExistUserError extends BaseError {
     constructor(id: string) {
-        super(`User with UserID = ${id} is not exist`, 404)
+        super(`User with UserID = ${id} is not found`, 404)
     }
 }
 
