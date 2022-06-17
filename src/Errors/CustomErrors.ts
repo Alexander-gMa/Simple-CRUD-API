@@ -24,6 +24,20 @@ export class ServerInternalError extends BaseError {
 
 export class InvalidUUIDError extends BaseError {
     constructor(id: string) {
-        super(`UserID = ${id} is invalid (not uuid)`, 400);
+        id === '' ?
+            super(`UserID is empty`, 400) :
+            super(`UserID = ${id} is invalid (not uuid)`, 400)
+    }
+}
+
+export class NotExistUserError extends BaseError {
+    constructor(id: string) {
+        super(`User with UserID = ${id} is not exist`, 404)
+    }
+}
+
+export class CrashDataBaseError extends BaseError {
+    constructor() {
+        super(`Data base is corrupted\n. Please reload the App`, 400)
     }
 }

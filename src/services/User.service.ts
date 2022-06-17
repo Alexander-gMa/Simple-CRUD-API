@@ -1,13 +1,15 @@
 import { IUser } from '../services/User.model';
 import { v4, validate as validateUUID } from 'uuid';
-import { InvalidUUIDError } from '../Errors/CustomErrors';
+import { InvalidUUIDError, NotExistUserError, CrashDataBaseError } from '../Errors/CustomErrors';
 
 let dataBase: IUser[] = []
 
 const searchUser = (id: string) => {
+    if (!validateUUID(id)) throw new InvalidUUIDError(id);
     const correctUser = dataBase.filter(user => user.id == id);
-    if (correctUser.length > 1) return false;
-    return (correctUser.length) ? correctUser[0] : false;
+    if (correctUser.length < 1) throw new NotExistUserError(id);
+    if (correctUser.length > 1) throw new CrashDataBaseError();
+    if (correctUser.length === 1) return correctUser[0];
 }
 
 const getAll = () => dataBase;
@@ -22,21 +24,15 @@ const create = (user: IUser): Promise<IUser> => {
 }
 
 const remove = (id: string) => {
-    if (!validateUUID(id)) throw new InvalidUUIDError(id);
     const existingUser = searchUser(id);
-    if (existingUser) {
-        const index = dataBase.indexOf(existingUser);
-        dataBase.splice(index, 1);
-    } else throw new Error('такого юзера нету!');
+    const index = dataBase.indexOf(existingUser as IUser);
+    dataBase.splice(index, 1);
 };
 
 const update = (id: string, user: IUser) => {
-    if (!validateUUID(id)) throw new Error('айди не валидный')
     const existingUser = searchUser(id);
-    if (existingUser) {
-        const index = dataBase.indexOf(existingUser);
-        dataBase[index] = { ...dataBase[index], ...user };
-    } else throw new Error('такого юзера нету!');
+    const index = dataBase.indexOf(existingUser as IUser);
+    dataBase[index] = { ...dataBase[index], ...user };
 };
 
 export { getAll, create, remove, update, searchUser };

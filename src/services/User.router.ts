@@ -1,6 +1,6 @@
 import { getAll, create, remove, update, searchUser } from "./User.service";
 import { RouterCallbackFunc } from "../Server/Server.types";
-import { BaseError } from "../Errors/CustomErrors";
+import { BaseError, ServerInternalError } from "../Errors/CustomErrors";
 
 const getAllUsers: RouterCallbackFunc = async (req, res) => {
     try {
@@ -8,10 +8,15 @@ const getAllUsers: RouterCallbackFunc = async (req, res) => {
         res.setHeader("Content-Type", "application/json");
         res.statusCode = 200;
         res.end(JSON.stringify(users));
-    } catch (err: any) {
-        res.statusCode = (err.code) ? err.code : 500;
-        const message = (err.code) ? err.message : 'Internal Server Error';
-        res.end(message);
+    } catch (err) {
+        if (err instanceof BaseError) {
+            res.statusCode = err.code;
+            res.end(err.message);
+        } else {
+            const { code, message } = new ServerInternalError();
+            res.statusCode = code;
+            res.end(message);
+        }
     }
 };
 
@@ -26,6 +31,14 @@ const createUser: RouterCallbackFunc = async (req, res) => {
             res.writeHead(201, { 'Content-Type': 'application/json' });
             res.end(JSON.stringify(newUser));
         } catch (err) {
+            if (err instanceof BaseError) {
+                res.statusCode = err.code;
+                res.end(err.message);
+            } else {
+                const { code, message } = new ServerInternalError();
+                res.statusCode = code;
+                res.end(message);
+            }
         }
     })
 }
@@ -34,13 +47,17 @@ const deleteUser: RouterCallbackFunc = async (req, res) => {
     try {
         const url = req.url;
         const userId = url?.substring('/api/users/'.length);
-        remove(userId as string);
+        await remove(userId as string);
         res.writeHead(204, { 'Content-Type': 'application/json' });
         res.end();
     } catch (err) {
         if (err instanceof BaseError) {
             res.statusCode = err.code;
             res.end(err.message);
+        } else {
+            const { code, message } = new ServerInternalError();
+            res.statusCode = code;
+            res.end(message);
         }
     }
 }
@@ -54,11 +71,18 @@ const updateUser: RouterCallbackFunc = async (req, res) => {
             userData = JSON.parse(data);
             const url = req.url;
             const userId = url?.substring('/api/users/'.length);
-            update(userId as string, userData);
+            await update(userId as string, userData);
             res.writeHead(200, { 'Content-Type': 'application/json' });
             res.end(JSON.stringify(userData));
-        } catch (error) {
-            res.end('error');
+        } catch (err) {
+            if (err instanceof BaseError) {
+                res.statusCode = err.code;
+                res.end(err.message);
+            } else {
+                const { code, message } = new ServerInternalError();
+                res.statusCode = code;
+                res.end(message);
+            }
         }
     })
 }
@@ -70,8 +94,15 @@ const getUserByID: RouterCallbackFunc = async (req, res) => {
         const currentUser = searchUser(userId as string);
         res.writeHead(200, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify(currentUser));
-    } catch (error) {
-        res.end('error');
+    } catch (err) {
+        if (err instanceof BaseError) {
+            res.statusCode = err.code;
+            res.end(err.message);
+        } else {
+            const { code, message } = new ServerInternalError();
+            res.statusCode = code;
+            res.end(message);
+        }
     }
 }
 
