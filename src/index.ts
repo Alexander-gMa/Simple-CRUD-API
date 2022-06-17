@@ -2,6 +2,8 @@ import http from 'http';
 import { envConfig } from './common/config';
 import { getAllUsers, createUser, deleteUser, updateUser, getUserByID } from './services/User.router';
 import { MethodType } from './Server/Server.types';
+import { BaseError, NotFoundError } from './Errors/CustomErrors';
+import { ERROR_MESSAGES } from './Errors/error.messages';
 
 
 const port = envConfig.SERVER_PORT;
@@ -23,10 +25,16 @@ const server = http.createServer(async (req, res) => {
                 await SERVER_ROUTES[method](req, res)
             };
         } else {
-            throw new Error('404 ошибка');
+            throw new NotFoundError();
         }
-    } catch (err: any) {
-        res.end('404 ошибка');
+    } catch (err) {
+        if (err instanceof BaseError) {
+            res.statusCode = err.code;
+            res.end(err.message);
+        } else {
+            res.statusCode = 500;
+            res.end(ERROR_MESSAGES.SERVER_INTERNAL);
+        }
     }
 })
 

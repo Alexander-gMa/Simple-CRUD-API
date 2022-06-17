@@ -64,7 +64,6 @@ const getUserByID: RouterCallbackFunc = async (req, res) => {
         const url = req.url;
         const userId = url?.substring('/api/users/'.length);
         const currentUser = searchUser(userId as string);
-        console.log(currentUser);
         res.writeHead(200, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify(currentUser));
     } catch (error) {
