@@ -33,7 +33,7 @@ const createUser: RouterCallbackFunc = async (req, res) => {
 const deleteUser: RouterCallbackFunc = async (req, res) => {
     try {
         const url = req.url;
-        const userId = url?.substring(BASE_URL.length);
+        const userId = url?.substring(`/${BASE_URL}`.length);
         await remove(userId as string);
         res.writeHead(204, { 'Content-Type': 'application/json' });
         res.end();
@@ -50,7 +50,7 @@ const updateUser: RouterCallbackFunc = async (req, res) => {
         try {
             userData = JSON.parse(data);
             const url = req.url;
-            const userId = url?.substring(BASE_URL.length);
+            const userId = url?.substring(`/${BASE_URL}`.length);
             await update(userId as string, userData);
             res.writeHead(200, { 'Content-Type': 'application/json' });
             res.end(JSON.stringify(userData));
@@ -63,7 +63,7 @@ const updateUser: RouterCallbackFunc = async (req, res) => {
 const getUserByID: RouterCallbackFunc = async (req, res) => {
     try {
         const url = req.url;
-        const userId = url?.substring(BASE_URL.length);
+        const userId = url?.substring(`/${BASE_URL}`.length);
         const currentUser = searchUser(userId as string);
         res.writeHead(200, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify(currentUser));
