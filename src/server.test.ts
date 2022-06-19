@@ -1,6 +1,6 @@
 import request from 'supertest';
 import { IUser } from './services/User.model';
-import { createServer } from './createServer';
+import { createServer } from './Server/createServer';
 import { BASE_URL } from './utils/constants';
 
 const server = createServer();

@@ -1,6 +1,6 @@
 import cluster from "node:cluster";
 import { cpus } from "node:os";
-import { createServer } from "./createServer";
+import { createServer } from "./Server/createServer";
 
 const numCPUs = cpus().length;
 
