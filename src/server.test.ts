@@ -1,5 +1,5 @@
 import request from 'supertest';
-import { IUser } from './services/User.model';
+import { IUser, IUSER_DEFAULT } from './services/User.model';
 import { createServer } from './createServer';
 import { BASE_URL } from './utils/constants';
 
@@ -92,41 +92,6 @@ describe('Simple CRUD API TEST', () => {
             expect(requestServer.statusCode).toEqual(404);
         });
     });
-    // describe('Second scenario', () => {
-    //     let promises = [];
-    //     it('Should create 3 users successfully', async () => {
-    //         await USERS_DATA.forEach(async (user) => {
-    //             const requestServer = await request(server)
-    //                 .post(BASE_URL)
-    //                 .send(user)
-    //             expect(requestServer.statusCode).toEqual(201);
-    //             expect(requestServer.body.username).toEqual(user.username);
-    //             expect(requestServer.body.age).toEqual(user.age);
-    //             expect(JSON.stringify(requestServer.body.hobbies))
-    //                 .toEqual(
-    //                     JSON.stringify(user.hobbies),
-    //                 );
-    //             id = requestServer.body.id;
-
-    //         })
-    //     });
-    //     it('Should delete 3 users successfully', async () => {
-    //         console.log(id, 'aaa');
-    //         // await usersArr.forEach(async (user) => {
-    //         //     const requestServer = await request(server)
-    //         //         .delete(`${BASE_URL}/${user.id}`)
-    //         //     expect(requestServer.statusCode).toEqual(204);
-    //         // })
-    //     });
-    //     // it('Should get deleted USERS (404 error)', async () => {
-    //     //     console.log(usersArr, 'bbb');
-    //     //     await usersArr.forEach(async (user) => {
-    //     //         const requestServer = await request(server)
-    //     //             .get(`${BASE_URL}/${user.id}`)
-    //     //         expect(requestServer.statusCode).toEqual('asf');
-    //     //     })
-    //     // });
-    // });
     describe('Second scenario', () => {
         it('Should get a person by invalid ID', async () => {
             const requestServer = await request(server)
@@ -163,4 +128,44 @@ describe('Simple CRUD API TEST', () => {
             expect(requestServer.statusCode).toEqual(400);
         });
     })
+    describe('Third scenario', () => {
+        let usersArr: IUser[] = [];
+        it('Should create 3 users successfully', async () => {
+            await USERS_DATA.forEach(async (user) => {
+                const requestServer = await request(server)
+                    .post(BASE_URL)
+                    .send(user)
+                expect(requestServer.statusCode).toEqual(201);
+                expect(requestServer.body.username).toEqual(user.username);
+                expect(requestServer.body.age).toEqual(user.age);
+                expect(JSON.stringify(requestServer.body.hobbies))
+                    .toEqual(
+                        JSON.stringify(user.hobbies),
+                    );
+            })
+        });
+        it('Should return all users', async () => {
+            const requestServer = await request(server)
+                .get(BASE_URL)
+                .set('Accept', 'application/json')
+                .expect('Content-Type', /json/);
+            usersArr = requestServer.body;
+            expect(requestServer.statusCode).toEqual(200);
+            expect(Array.isArray(requestServer.body)).toBe(true);
+        });
+        it('Should delete 3 users successfully', async () => {
+            await usersArr.forEach(async (user) => {
+                const requestServer = await request(server)
+                    .delete(`${BASE_URL}/${user.id}`)
+                expect(requestServer.statusCode).toEqual(204);
+            })
+        });
+        it('Should get deleted USERS (404 error)', async () => {
+            await usersArr.forEach(async (user) => {
+                const requestServer = await request(server)
+                    .get(`${BASE_URL}/${user.id}`)
+                expect(requestServer.statusCode).toEqual(404);
+            })
+        });
+    });
 })
