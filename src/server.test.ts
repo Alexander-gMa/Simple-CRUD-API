@@ -1,5 +1,5 @@
 import request from 'supertest';
-import { IUser, IUSER_DEFAULT } from './services/User.model';
+import { IUser } from './services/User.model';
 import { createServer } from './createServer';
 import { BASE_URL } from './utils/constants';
 
@@ -10,8 +10,6 @@ let USER: IUser = {
     age: 666,
     hobbies: ["fishing", "running"]
 };
-
-let id: number = 0;
 
 const USERS_DATA: IUser[] = [
     {
