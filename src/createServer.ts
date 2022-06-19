@@ -2,11 +2,11 @@ import http from 'http';
 import { envConfig } from './common/config';
 import { getAllUsers, createUser, deleteUser, updateUser, getUserByID } from './services/User.router';
 import { MethodType } from './Server/Server.types';
-import { BaseError, NotFoundError, ServerInternalError } from './Errors/CustomErrors';
+import { NotFoundError } from './Errors/CustomErrors';
 import { HandleError } from './Errors/handler.error';
+import { BASE_URL } from './utils/constants';
 
 const port = envConfig.SERVER_PORT;
-
 
 const SERVER_ROUTES = {
     GET: getUserByID,
@@ -20,8 +20,8 @@ export const createServer = () => {
         const method = req.method as MethodType;
         const url: string | undefined = req.url;
         try {
-            if (url?.startsWith('/api/users')) {
-                if (method === 'GET' && url === '/api/users') await getAllUsers(req, res);
+            if (url?.startsWith(BASE_URL)) {
+                if (method === 'GET' && url === BASE_URL) await getAllUsers(req, res);
                 else {
                     await SERVER_ROUTES[method](req, res)
                 };
@@ -35,4 +35,5 @@ export const createServer = () => {
     server.listen(port, () => {
         console.log(`Server running at port ${port}`)
     });
+    return server;
 }
