@@ -17,6 +17,14 @@ hobbies — список хобби (array of strings or empty array, required)
 - **PUT** `/api/person/{personId}` обновить существующего юзера;
 - **DELETE** `/api/person/${personId}` удалить существующего юзера.
 
+## Example of valid request body:
+
+{
+    "username": "Elon Musk",
+    "age": 55,
+    "hobbies": ["programming","spending money"]
+}
+
 ## Установка приложения
 
 ```
