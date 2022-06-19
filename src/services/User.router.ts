@@ -5,7 +5,6 @@ import { BASE_URL } from "../utils/constants";
 import { NotFoundError } from "../Errors/CustomErrors";
 
 const getAllUsers: RouterCallbackFunc = async (req, res) => {
-    if (req.url !== BASE_URL) throw NotFoundError;
         try {
             const users = await getAll();
             res.setHeader("Content-Type", "application/json");
@@ -17,6 +16,7 @@ const getAllUsers: RouterCallbackFunc = async (req, res) => {
 };
 
 const createUser: RouterCallbackFunc = async (req, res) => {
+    if (req.url !== BASE_URL) throw new NotFoundError();
     let data = '';
     req.on('data', (chunk) => (data += chunk));
     req.on('end', async () => {

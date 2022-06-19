@@ -1,5 +1,6 @@
 import { RouterCallbackFunc } from "../Server/Server.types";
-import { BaseError, ServerInternalError } from "./CustomErrors";
+import { BaseError, NotFoundError, ServerInternalError } from "./CustomErrors";
+import { ERROR_MESSAGES } from "./error.messages";
 
 
 const HandleError: RouterCallbackFunc = (req, res, err) => {
@@ -14,6 +15,10 @@ const HandleError: RouterCallbackFunc = (req, res, err) => {
         There are the possible reasons:
         1)Unexpected token } in JSON -> Remove last comma
         2)Wrong comma in hobbies, replace single quotes with double quotes`);
+    }
+    else if (err instanceof NotFoundError) {
+        res.statusCode = err.code;
+        res.end(ERROR_MESSAGES.NOT_FOUND);
     } else {
         const { code, message } = new ServerInternalError();
         res.statusCode = code;
