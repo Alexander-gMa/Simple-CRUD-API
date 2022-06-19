@@ -1,6 +1,5 @@
 import request from 'supertest';
 import { IUser } from './services/User.model';
-import { ERROR_MESSAGES } from './Errors/Error.messages';
 import { createServer } from './createServer';
 import { BASE_URL } from './utils/constants';
 
@@ -12,11 +11,25 @@ let USER: IUser = {
     hobbies: ["fishing", "running"]
 };
 
-const SECOND_USER: IUser = {
-    username: "Mitya Fomin",
-    age: 19,
-    hobbies: ["signing", "dancing"]
-}
+let id: number = 0;
+
+const USERS_DATA: IUser[] = [
+    {
+        username: "Mity Fomin",
+        age: 19,
+        hobbies: ["signing", "dancing"]
+    },
+    {
+        username: "Dima Bilan",
+        age: 23,
+        hobbies: ["signing", "jumping"]
+    },
+    {
+        username: "Morgenshtern",
+        age: 10,
+        hobbies: [""]
+    }
+];
 
 describe('Simple CRUD API TEST', () => {
     describe('First scenario', () => {
@@ -79,4 +92,75 @@ describe('Simple CRUD API TEST', () => {
             expect(requestServer.statusCode).toEqual(404);
         });
     });
+    // describe('Second scenario', () => {
+    //     let promises = [];
+    //     it('Should create 3 users successfully', async () => {
+    //         await USERS_DATA.forEach(async (user) => {
+    //             const requestServer = await request(server)
+    //                 .post(BASE_URL)
+    //                 .send(user)
+    //             expect(requestServer.statusCode).toEqual(201);
+    //             expect(requestServer.body.username).toEqual(user.username);
+    //             expect(requestServer.body.age).toEqual(user.age);
+    //             expect(JSON.stringify(requestServer.body.hobbies))
+    //                 .toEqual(
+    //                     JSON.stringify(user.hobbies),
+    //                 );
+    //             id = requestServer.body.id;
+
+    //         })
+    //     });
+    //     it('Should delete 3 users successfully', async () => {
+    //         console.log(id, 'aaa');
+    //         // await usersArr.forEach(async (user) => {
+    //         //     const requestServer = await request(server)
+    //         //         .delete(`${BASE_URL}/${user.id}`)
+    //         //     expect(requestServer.statusCode).toEqual(204);
+    //         // })
+    //     });
+    //     // it('Should get deleted USERS (404 error)', async () => {
+    //     //     console.log(usersArr, 'bbb');
+    //     //     await usersArr.forEach(async (user) => {
+    //     //         const requestServer = await request(server)
+    //     //             .get(`${BASE_URL}/${user.id}`)
+    //     //         expect(requestServer.statusCode).toEqual('asf');
+    //     //     })
+    //     // });
+    // });
+    describe('Second scenario', () => {
+        it('Should get a person by invalid ID', async () => {
+            const requestServer = await request(server)
+                .get(`${BASE_URL}/${123}`)
+            expect(requestServer.statusCode).toEqual(400);
+            expect(requestServer.body instanceof Object).toBe(true);
+        });
+        it('create user with invalid data', async () => {
+            const requestServer = await request(server)
+                .post(BASE_URL)
+                .send({ ...USER, username: 123 })
+            expect(requestServer.statusCode).toEqual(400);
+        });
+        it('delete non-existing user', async () => {
+            const requestServer = await request(server)
+                .delete(`${BASE_URL}/5d4f620b-d688-41f6-b1cd-2ca4c85dbd94`)
+            expect(requestServer.statusCode).toEqual(404);
+        });
+        it('delete user with wrong id (not uuid)', async () => {
+            const requestServer = await request(server)
+                .delete(`${BASE_URL}/12314`)
+            expect(requestServer.statusCode).toEqual(400);
+        });
+        it('update non-existing user', async () => {
+            const requestServer = await request(server)
+                .put(`${BASE_URL}/5d4f620b-d688-41f6-b1cd-2ca4c85dbd94`)
+                .send({ ...USER, username: 'Sanya' })
+            expect(requestServer.statusCode).toEqual(404);
+        });
+        it('update user with wrong id (not uuid)', async () => {
+            const requestServer = await request(server)
+                .put(`${BASE_URL}/123`)
+                .send({ ...USER, username: 'Sanya' })
+            expect(requestServer.statusCode).toEqual(400);
+        });
+    })
 })
