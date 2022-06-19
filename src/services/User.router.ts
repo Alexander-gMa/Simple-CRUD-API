@@ -2,16 +2,19 @@ import { getAll, create, remove, update, searchUser } from "./User.service";
 import { RouterCallbackFunc } from "../Server/Server.types";
 import { HandleError } from "../Errors/handler.error";
 import { BASE_URL } from "../utils/constants";
+import { NotFoundError } from "../Errors/CustomErrors";
 
 const getAllUsers: RouterCallbackFunc = async (req, res) => {
-    try {
-        const users = await getAll();
-        res.setHeader("Content-Type", "application/json");
-        res.statusCode = 200;
-        res.end(JSON.stringify(users));
-    } catch (err) {
-        HandleError(req, res, err);
-    }
+    if (req.url !== BASE_URL) throw NotFoundError;
+    console.log(req.url);
+        try {
+            const users = await getAll();
+            res.setHeader("Content-Type", "application/json");
+            res.statusCode = 200;
+            res.end(JSON.stringify(users));
+        } catch (err) {
+            HandleError(req, res, err);
+        }
 };
 
 const createUser: RouterCallbackFunc = async (req, res) => {
