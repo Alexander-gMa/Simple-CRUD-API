@@ -6,7 +6,6 @@ import { NotFoundError } from "../Errors/CustomErrors";
 
 const getAllUsers: RouterCallbackFunc = async (req, res) => {
     if (req.url !== BASE_URL) throw NotFoundError;
-    console.log(req.url);
         try {
             const users = await getAll();
             res.setHeader("Content-Type", "application/json");
