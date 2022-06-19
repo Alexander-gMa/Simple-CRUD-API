@@ -3,7 +3,7 @@ import { IUser } from './services/User.model';
 import { createServer } from './Server/createServer';
 import { BASE_URL } from './utils/constants';
 
-const server = createServer();
+const server = createServer('5000');
 
 let USER: IUser = {
     username: "Alesha Popovich",
