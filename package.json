@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "test": "npx jest --noStackTrace --runInBand --detectOpenHandles",
+    "test": "npx jest --noStackTrace --runInBand --detectOpenHandles --forceExit",
     "start:multi": "npm run build && npm run multi",
     "start:prod": "npm run build && npm run prod",
     "start:dev": "nodemon src/index.ts",
