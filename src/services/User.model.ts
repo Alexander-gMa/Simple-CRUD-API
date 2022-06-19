@@ -4,3 +4,9 @@ export interface IUser {
     age: number;
     hobbies: Array<string>;
 }
+
+export class IUSER_DEFAULT implements IUser {
+    username: string = '';
+    age: number = 0;
+    hobbies: string[] = []
+}
