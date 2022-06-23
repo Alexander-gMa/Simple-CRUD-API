@@ -11,11 +11,11 @@ hobbies — список хобби (array of strings or empty array, required)
 
 ## Endpoints
 
-- **GET** `/api/person` получить всех юзеров;
-- **GET** `/api/person/${personId}` получить юзера по айди;
-- **POST** `/api/person` создать юзера и добавить в database;
-- **PUT** `/api/person/{personId}` обновить существующего юзера;
-- **DELETE** `/api/person/${personId}` удалить существующего юзера.
+- **GET** `/api/users` получить всех юзеров;
+- **GET** `/api/users/${usersID}` получить юзера по айди;
+- **POST** `/api/users` создать юзера и добавить в database;
+- **PUT** `/api/users/{usersID}` обновить существующего юзера;
+- **DELETE** `/api/users/${usersID}` удалить существующего юзера.
 
 ## Example of valid request body:
 ```
